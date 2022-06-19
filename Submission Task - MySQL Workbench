@@ -1,0 +1,87 @@
+create database ogstore;
+use ogstore;
+create table categories (
+	id int auto_increment not null,
+    categorie_name varchar(25),
+    primary key (id)
+);
+create table musical_instruments_accessories (
+	id int auto_increment not null,
+    musical_instruments_accessories_name varchar(25),
+    musical_instruments_accessories_price int,
+    categories int,
+    onStock boolean,
+    primary key (id),
+    constraint  musical_instruments_accessories_con foreign key (categories) references categories(id)
+);
+create table recording_studio_equipment_accessories (
+	id int auto_increment not null,
+    recording_studio_equipment_accessories_name varchar(25),
+    recording_studio_equipment_accessories_price int,
+     categories int,
+    onStock boolean,
+    primary key (id),
+    constraint recording_studio_equipment_accessories_con foreign key (categories) references categories(id)
+);
+create table customers (
+	id int auto_increment not null,
+    Customers_name varchar(25),
+    Customers_tel int,
+    favorite_categorie int,
+     gender  varchar(25),
+    primary key (id),
+    constraint customers_con foreign key (favorite_categorie) references categories(id)
+);
+create table orders (
+	id int auto_increment not null,
+   product_kitchen int,
+   product_laptop int,
+   customer int,
+   order_date timestamp,
+    primary key (id),
+	foreign key (musical_instruments_accessories) references musical_instruments_accessories(id),
+	foreign key (recording_studio_equipment_accessories) references recording_studio_equipment_accessories(id),
+    foreign key (customer) references customers(id)
+);
+insert into  categories (id, categorie_name) values
+(0,"musical"),
+(0,"recording");
+
+insert into  musical_instruments_accessories (id, musical_instruments_accessories_name,pmusical_instruments_accessories_price,categories,onStock) values
+(0,"FENDER PLAYER LEAD III PF MTLC PRPL",3200,1,true),
+(0,"FENDER PLAYER STRATOCASTER Polar White",3500,1,true),
+(0,"FENDER PLAYER TELECASTER Black",3800,1,false),
+(0,"LVCL4101 Stagg",1750,1,false),
+(0," סקסופון TS100 Jinbao",755,1,true);
+ insert into recording_studio_equipment_accessories (id, recording_studio_equipment_accessories_name,recording_studio_equipment_accessories_price,categories,onStock) values
+(0,"כרטיס קול MOTU 8M",6820,2,true),
+(0,"רמקול מוניטור 1000W מעץ Monkey Banana Silverback “15",7700,2,true),
+(0,"קונטרולר Pioneer DDJ-RZX",14500,2,false),
+(0,"מכונת הפקה מתקדמת Native Instruments MASCHINE Mk3",2990,2,false),
+(0," מכונת הפקה מתקדמת MASCHINE MIKRO Mk3",1245,2,true);
+
+insert into  customers (id, customers_name,customers_tel,favorite_categorie,gender) values
+(0,"Liat Bar",0533337271,1,"Female"),
+(0,"Chen Salhov",0537202310,2,"Female"),
+(0,"Kineeret Eshed",0544445050,1,"Female"),
+(0,"Ori Gay",0543232000,2,"Male"),
+(0," Lvi Israel",0542533615,1,"Male");
+
+insert into  orders (id,musical_instruments_accessories,recording_studio_equipment_accessories,customer,order_date) values
+(0,1,5,2,"2022-06-14"),
+(0,5,null,4,"2022-06-12"),
+(0,null,5,3,"2022-06-13"),
+(0,null,1,1,"2022-06-10"),
+(0,null,2,5,"2022-06-8");
+
+select * from categories;
+select * from customers;
+select * from orders;
+select * from musical_instruments_accessories;
+select * from recording_studio_equipment_accessories;
+
+select * from orders;
+SELECT  customers.Customers_name,musical_instruments_accessories.musical_instruments_accessories_name
+FROM ((orders
+INNER JOIN customers ON orders.customer = customers.id)
+INNER JOIN musical_instruments_accessories ON orders.musical_instruments_accessories = musical_instruments_accessories.id);
